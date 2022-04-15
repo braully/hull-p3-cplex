@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>run</actionName>
+            <packagings>
+                <packaging>jar</packaging>
+            </packagings>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
+            </goals>
+            <properties>
+                <exec.args>-Djava.library.path="/dados/programas/cplex/cplex/bin/x86-64_linux" -classpath %classpath io.github.braully.cplex.HullP3Cplex</exec.args>
+                <exec.executable>java</exec.executable>
+            </properties>
+        </action>
+        <action>
+            <actionName>debug</actionName>
+            <packagings>
+                <packaging>jar</packaging>
+            </packagings>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
+            </goals>
+            <properties>
+                <exec.args>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address} -Djava.library.path="/dados/programas/cplex/cplex/bin/x86-64_linux" -classpath %classpath io.github.braully.cplex.HullP3Cplex</exec.args>
+                <exec.executable>java</exec.executable>
+                <jpda.listen>true</jpda.listen>
+            </properties>
+        </action>
+        <action>
+            <actionName>profile</actionName>
+            <packagings>
+                <packaging>jar</packaging>
+            </packagings>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
+            </goals>
+            <properties>
+                <exec.args>-Djava.library.path="/dados/programas/cplex/cplex/bin/x86-64_linux" -classpath %classpath io.github.braully.cplex.HullP3Cplex</exec.args>
+                <exec.executable>java</exec.executable>
+            </properties>
+        </action>
+        <action>
+            <actionName>run.single.main</actionName>
+            <packagings>
+                <packaging>*</packaging>
+            </packagings>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
+            </goals>
+            <properties>
+                <exec.args>-Djava.library.path="/dados/programas/cplex/cplex/bin/x86-64_linux" -classpath %classpath ${packageClassName}</exec.args>
+                <exec.executable>java</exec.executable>
+                <exec.classpathScope>${classPathScope}</exec.classpathScope>
+                <java.library.path>/dados/programas/cplex/cplex/bin/x86-64_linux</java.library.path>
+            </properties>
+        </action>
+    </actions>
