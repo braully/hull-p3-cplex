@@ -3,7 +3,6 @@ package io.github.braully.cplex;
 import ilog.concert.IloException;
 import ilog.concert.IloIntVar;
 import ilog.cplex.IloCplex;
-import static io.github.braully.cplex.HullP3Cplex.matrix;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,20 +65,27 @@ public class CplexHull {
             }
 
             for (int i = 0; i < n; i++) {
-                for (int j = 1; j < k; j++) {
+                for (int j = 1; j < k - 1; j++) {
 
                     List<IloIntVar> adjs = new ArrayList<>();
                     //Situação dos vizinhos de i na iteração anterior
                     for (int c = 0; c < n; c++) {
                         if (matrix[i][c] == 1) {
-                            adjs.add(hij[i][j - 1]);
+                            adjs.add(hij[c][j - 1]);
                         }
                     }
+                    adjs.add(hij[i][0]);
+                    adjs.add(hij[i][0]);
+
                     IloIntVar[] vizinhosi = adjs.toArray(new IloIntVar[0]);
                     //Se i tem mais de dois vizinhos em h na iteração j-1, 
                     // então i precisa estar na iteração j 
-                    cplex.addGe(hij[i][j], 
-                            cplex.prod(cplex.sum(vizinhosi), 0.5), 
+//                    cplex.addGe(hij[i][j], 
+//                            cplex.prod(cplex.sum(vizinhosi), 0.5), 
+//                            "edge"
+//                    );
+                    cplex.addGe(hij[i][j],
+                            cplex.addGe(cplex.sum(vizinhosi), 2),
                             "edge"
                     );
                 }
