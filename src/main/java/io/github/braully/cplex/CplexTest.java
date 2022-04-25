@@ -4,6 +4,7 @@ import ilog.concert.IloException;
 import ilog.concert.IloIntVar;
 import ilog.concert.IloLinearNumExpr;
 import ilog.concert.IloLinearNumExprIterator;
+import ilog.concert.IloNumVar;
 import ilog.concert.IloObjective;
 import ilog.concert.IloObjectiveSense;
 import ilog.concert.IloRange;
@@ -69,7 +70,7 @@ public class CplexTest {
 
             int n = matrix.length;
             //k é o max iteracoes
-            int k = 3;
+            int k = 4;
 
             List<String> xnames = new ArrayList();
             for (int i = 0; i < n; i++) {
@@ -86,14 +87,15 @@ public class CplexTest {
             cplex.addGe(cplex.sum(x), 2);
 
             IloIntVar aux[] = cplex.intVarArray(n, 0, 100);
-            IloIntVar[][] y = new IloIntVar[n][];
+            IloNumVar[][] y = new IloNumVar[n][];
             for (int i = 0; i < k; i++) {
 //                y[i] = cplex.intVarArray(n, 0, 2);
                 List<String> ynames = new ArrayList();
                 for (int j = 0; j < n; j++) {
                     ynames.add("y" + i + "," + j);
                 }
-                y[i] = cplex.intVarArray(n, 0, 1, ynames.toArray(new String[0]));
+//                y[i] = cplex.intVarArray(n, 0, 1, ynames.toArray(new String[0]));
+                y[i] = cplex.numVarArray(n, 0.0, 10.0, ynames.toArray(new String[0]));
             }
             //Se yij tem dois vizinhos em y*j-1, então 
             for (int i = 0; i < n; i++) {
@@ -102,9 +104,9 @@ public class CplexTest {
 //                cplex.addEq(y[0][i], cplex.prod(x[i], 2));
                 y[0][i] = x[i];
 
-//                for (int j = 1; j < k; j++) {
-//                    cplex.addGe(y[j][i], y[j - 1][i]);
-//                }
+                for (int j = 1; j < k - 1; j++) {
+//                    cplex.addLe(y[j][i], y[j + 1][i], "I");
+                }
             }
 
             for (int i = 0; i < n; i++) {
@@ -118,16 +120,18 @@ public class CplexTest {
 //                cplex.addEq(y[1][i], cplex.scalProd(matrix[i], y[0]));
 //                cplex.addGe(y[1][i], cplex.scalProd(matrix[i], y[0]));
 //                cplex.addEq(y[1][i], cplex.prod(cplex.scalProd(matrix[i], y[0]), 0.5), "v" + i);
-                cplex.addLe(cplex.prod(cplex.scalProd(matrix[i], y[0]), 0.5), y[1][i], "v" + i);
+//
+//                cplex.addLe(cplex.prod(cplex.scalProd(matrix[i], y[0]), 0.5), y[1][i], "v" + i);
+//
+//                cplex.addLe(cplex.prod(cplex.scalProd(matrix[i], y[0]), 0.5), cplex.prod(y[1][i], 2), "v" + i);
+//                cplex.addEq(cplex.prod(cplex.scalProd(matrix[i], y[0]), 0.5), cplex.prod(y[1][i], 2), "y1," + i);
+                cplex.addEq(y[1][i], cplex.max(cplex.prod(cplex.scalProd(matrix[i], y[0]), 0.5), y[0][i]), "y1," + i);
 
 //                cplex.addEq(aux[i], cplex.scalProd(matrix[i], y[0]));
 //                for (int j = 1; j < 3; j++) {
 //                    cplex.addEq(y[j][i], cplex.sum(cplex.prod(cplex.scalProd(matrix[i], y[j - 1]), 0.5), y[0][i]));
 //                }
             }
-
-            //Ao final de k iteraçoes todos os vertices precisam estar contaminados
-            cplex.addEq(cplex.sum(y[k - 1]), n, "s_hull");
 
             for (int i = 0; i < n; i++) {
 //                cplex.addEq(y[i], cplex.scalProd(matrix[i], x));
@@ -141,9 +145,18 @@ public class CplexTest {
 //                    cplex.addEq(y[j][i], cplex.sum(cplex.prod(cplex.scalProd(matrix[i], y[j - 1]), 0.5), y[0][i]));
 //                    cplex.addEq(y[j][i], y[j - 1][i]);
 
+//                    cplex.addEq(cplex.prod(cplex.scalProd(matrix[i], y[j - 1]), 0.5), cplex.prod(y[j][i], 2), "y" + j + "," + i);
+                    cplex.addEq(y[j][i], cplex.max(cplex.prod(cplex.scalProd(matrix[i], y[j - 1]), 0.5), y[j][i]), "y" + j + "," + i);
+
 //                    cplex.addGe(y[j][i], y[j - 1][i]);
                 }
             }
+
+            //Ao final de k iteraçoes todos os vertices precisam estar contaminados
+            for (int i = 0; i < n; i++) {
+                cplex.addEq(y[k - 1][i], 1, "s_hull_v" + i);
+            }
+//            cplex.addEq(cplex.sum(y[k - 1]), n, "s_hull");
 
             cplex.exportModel("cplexTest.lp");
 
@@ -162,67 +175,39 @@ public class CplexTest {
                 }
                 cplex.output().println("}");
 
-                double[] yv = cplex.getValues(y[0]);
+                for (int i = 0; i < k; i++) {
+                    double[] yv = cplex.getValues(y[i]);
 
-                nvars = yv.length;
-                cplex.output().print("Y0={");
-                for (int j = 0; j < nvars; ++j) {
+                    nvars = yv.length;
+                    cplex.output().print("Y" + i + "={");
+                    for (int j = 0; j < nvars; ++j) {
 //                    if (yv[j] >= 0) {
-                    cplex.output().print(j + ": " + yv[j] + ", ");
+                        cplex.output().print(j + ": " + yv[j] + ", ");
 //                    }
-                }
-                cplex.output().println("}");
-
-                yv = cplex.getValues(y[1]);
-                nvars = yv.length;
-                cplex.output().print("Y1={");
-                for (int j = 0; j < nvars; ++j) {
-//                    if (yv[j] >= 0) {
-                    cplex.output().print(j + ": " + yv[j] + ", ");
-//                    }
-                }
-                cplex.output().println("}");
-
-                yv = cplex.getValues(y[2]);
-                nvars = yv.length;
-                cplex.output().print("Y2={");
-                for (int j = 0; j < nvars; ++j) {
-//                    if (yv[j] >= 0) {
-                    cplex.output().print(j + ": " + yv[j] + ", ");
-//                    }
-                }
-                cplex.output().println("}");
-
-                yv = cplex.getValues(aux);
-                nvars = yv.length;
-                cplex.output().print("aux={");
-                for (int j = 0; j < nvars; ++j) {
-//                    if (yv[j] >= 0) {
-                    cplex.output().print(j + ": " + yv[j] + ", ");
-//                    }
-                }
-                cplex.output().println("}");
-
-                Iterator it = cplex.rangeIterator();
-                while (it.hasNext()) {
-                    IloRange r = (IloRange) it.next();
-                    System.out.println("Constraint: " + r.getName());
-                    IloLinearNumExprIterator it2
-                            = ((IloLinearNumExpr) r.getExpr()).linearIterator();
-                    while (it2.hasNext()) {
-                        System.out.println("\tVariable "
-                                + it2.nextNumVar().getName()
-                                + " has coefficient "
-                                + it2.getValue());
                     }
-                    // get range bounds, checking for +/- infinity
-                    // (allowing for some rounding)
-                    String lb = (r.getLB() <= Double.MIN_VALUE + 1)
-                            ? "-infinity" : Double.toString(r.getLB());
-                    String ub = (r.getUB() >= Double.MAX_VALUE - 1)
-                            ? "+infinity" : Double.toString(r.getUB());
-                    System.out.println("\t" + lb + " <= LHS <= " + ub);
+                    cplex.output().println("}");
                 }
+
+//                Iterator it = cplex.rangeIterator();
+//                while (it.hasNext()) {
+//                    IloRange r = (IloRange) it.next();
+//                    System.out.println("Constraint: " + r.getName());
+//                    IloLinearNumExprIterator it2
+//                            = ((IloLinearNumExpr) r.getExpr()).linearIterator();
+//                    while (it2.hasNext()) {
+//                        System.out.println("\tVariable "
+//                                + it2.nextNumVar().getName()
+//                                + " has coefficient "
+//                                + it2.getValue());
+//                    }
+//                    // get range bounds, checking for +/- infinity
+//                    // (allowing for some rounding)
+//                    String lb = (r.getLB() <= Double.MIN_VALUE + 1)
+//                            ? "-infinity" : Double.toString(r.getLB());
+//                    String ub = (r.getUB() >= Double.MAX_VALUE - 1)
+//                            ? "+infinity" : Double.toString(r.getUB());
+//                    System.out.println("\t" + lb + " <= LHS <= " + ub);
+//                }
             }
             cplex.output().println("Solution status = " + cplex.getStatus());
 
