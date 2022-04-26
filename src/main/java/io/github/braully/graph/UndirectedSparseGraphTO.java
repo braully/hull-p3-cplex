@@ -17,22 +17,7 @@ import java.util.Set;
  *
  * @author braully
  */
-public class UndirectedSparseGraphTO<V, E extends Number> extends UndirectedSparseGraph {
-
-    Integer maxDegree = null;
-
-    public Integer getMaxDegree() {
-        if (maxDegree == null) {
-            maxDegree = 0;
-            for (Integer v : (Collection<Integer>) this.getVertices()) {
-                int degree = this.degree(v);
-                if (degree > maxDegree) {
-                    maxDegree = degree;
-                }
-            }
-        }
-        return maxDegree;
-    }
+public class UndirectedSparseGraphTO<V extends Number, E extends Number> extends UndirectedSparseGraph {
 
     public UndirectedSparseGraphTO() {
         super();
@@ -43,16 +28,12 @@ public class UndirectedSparseGraphTO<V, E extends Number> extends UndirectedSpar
         this.addEdgesFromString(strEdegdsGraph);
     }
 
-    public UndirectedSparseGraphTO(String... strEdegdsGraph) {
-        this();
-        this.addEdgesFromStrings(strEdegdsGraph);
-    }
+    private List<V> cacheVertices;
 
-    public void addEdgesFromStrings(String... strEdges) {
-        if (strEdges != null) {
-            for (String str : strEdges) {
-                this.addEdgesFromString(str);
-            }
+    public UndirectedSparseGraphTO(int nvertices) {
+        this();
+        for (int i = 0; i < nvertices; i++) {
+            this.addVertex(i);
         }
     }
 
@@ -67,11 +48,7 @@ public class UndirectedSparseGraphTO<V, E extends Number> extends UndirectedSpar
                     if (vs != null && vs.length >= 2) {
                         Integer source = Integer.parseInt(vs[0].trim());
                         Integer target = Integer.parseInt(vs[1].trim());
-                        try {
-                            this.addEdge(countEdge++, source, target);
-                        } catch (Exception e) {
-                            this.addEdge(countEdge++, source, target);
-                        }
+                        this.addEdge(countEdge++, source, target);
                     }
                 }
             } catch (Exception e) {
@@ -128,11 +105,24 @@ public class UndirectedSparseGraphTO<V, E extends Number> extends UndirectedSpar
 
     @Override
     public Collection getVertices() {
-        Collection vals = super.getVertices();
-        List listVals = new ArrayList();
-        listVals.addAll(vals);
-        Collections.sort(listVals);
-        return listVals;
+        return cacheVertices();
+    }
+
+    public <V> V maxVertex() {
+        V max = (V) Collections.max(this.cacheVertices());
+        return max;
+    }
+
+    public List cacheVertices() {
+        if (cacheVertices == null) {
+            Collection vals = super.getVertices();
+            List listVals = new ArrayList();
+            listVals.addAll(vals);
+            Collections.sort(listVals);
+            cacheVertices = listVals;
+        }
+        return cacheVertices;
+
     }
 
     public Collection<Pair<V>> getNormalizedPairs() {
@@ -175,6 +165,18 @@ public class UndirectedSparseGraphTO<V, E extends Number> extends UndirectedSpar
         }
     }
 
+    @Override
+    public boolean removeVertex(Object vertex) {
+        clearCachedVertices();
+        return super.removeVertex(vertex);
+    }
+
+    @Override
+    public boolean addVertex(Object vertex) {
+        clearCachedVertices();
+        return super.addVertex(vertex);
+    }
+
     public Collection getDegrees() {
         List degrees = new ArrayList();
         Collection vertices1 = super.getVertices();
@@ -202,6 +204,25 @@ public class UndirectedSparseGraphTO<V, E extends Number> extends UndirectedSpar
 
     public Collection getSet() {
         return set;
+    }
+
+    protected double[] positionX;
+    protected double[] positionY;
+
+    public void setPositionX(double[] positionX) {
+        this.positionX = positionX;
+    }
+
+    public void setPositionY(double[] positionY) {
+        this.positionY = positionY;
+    }
+
+    public double[] getPositionX() {
+        return positionX;
+    }
+
+    public double[] getPositionY() {
+        return positionY;
     }
 
     public void setSet(Collection setStr) {
@@ -263,7 +284,6 @@ public class UndirectedSparseGraphTO<V, E extends Number> extends UndirectedSpar
     }
 
     public Object addEdge(int i, int j) {
-        System.out.println(i + "-" + j);
         Integer edgeCount = this.getEdgeCount();
         while (this.containsEdge(edgeCount)) {
             edgeCount = edgeCount + 1;
@@ -330,5 +350,13 @@ public class UndirectedSparseGraphTO<V, E extends Number> extends UndirectedSpar
             }
         }
         return -1;
+    }
+
+    public Integer verticeByIndex(int v) {
+        return (Integer) cacheVertices().get(v);
+    }
+
+    private void clearCachedVertices() {
+        cacheVertices = null;
     }
 }
