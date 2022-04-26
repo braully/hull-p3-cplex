@@ -41,7 +41,7 @@ public class GraphHullNumberHeuristicV1
 
     private Set<Integer> buildOptimizedHullSetFromStartVertice(UndirectedSparseGraphTO<Integer, Integer> graph,
             Integer v) {
-        System.out.println("start-vert: " + v);
+//        System.out.println("start-vert: " + v);
         Set<Integer> s = new HashSet<>();
         int vertexCount = graph.getVertexCount();
         int[] aux = new int[vertexCount];
