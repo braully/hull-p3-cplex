@@ -34,16 +34,16 @@ public class GraphHullNumber extends GraphHullNumberAbstract implements IGraphOp
             }
         }
         currentSize = Math.max(currentSize, countOneNeigh);
-        System.out.println("Find hull number");
+//        System.out.println("Find hull number");
         while (currentSize < maxSizeSet) {
-            System.out.println("trying : " + currentSize);
+//            System.out.println("trying : " + currentSize);
             Set<Integer> hs = findHullSetBruteForce(graph, currentSize);
             if (hs != null && !hs.isEmpty()) {
                 hullSet = hs;
-                System.out.println("ok");
+//                System.out.println("ok");
                 break;
             } else {
-                System.out.println("not found");
+//                System.out.println("not found");
             }
             currentSize++;
         }

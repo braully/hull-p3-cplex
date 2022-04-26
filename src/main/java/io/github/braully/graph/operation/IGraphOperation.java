@@ -11,6 +11,7 @@ import java.util.Map;
 public interface IGraphOperation {
 
     public static final String DEFAULT_PARAM_NAME_RESULT = "result";
+    public static final String PARAM_NAME_TOTAL_TIME_MS = "Time(s)";
 
     public String getTypeProblem();
 
