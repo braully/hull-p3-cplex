@@ -28,8 +28,10 @@ public class GraphHullNumberCplex extends GraphHullNumberAbstract implements IGr
 
     public static void main(String[] args) throws IOException {
         System.out.println("Simple test standalone");
-        UndirectedSparseGraphTO<Integer, Integer> graph = UtilGraph.loadGraphG6(new FileInputStream("./graph-petersen.g6"));
-        System.out.println("loaded petersen graph: " + graph);
+//        UndirectedSparseGraphTO<Integer, Integer> graph = UtilGraph.loadGraphG6(new FileInputStream("./graph-petersen.g6"));
+        UndirectedSparseGraphTO<Integer, Integer> graph = UtilGraph.loadGraphES(new FileInputStream("./graph-C5.es"));
+
+        System.out.println("loaded graph: " + graph);
 
         GraphHullNumberCplex operation = new GraphHullNumberCplex();
         Set<Integer> minHullSetGraph = operation.findMinHullSetGraph(graph);
@@ -213,8 +215,7 @@ public class GraphHullNumberCplex extends GraphHullNumberAbstract implements IGr
                 }
             }
 
-            cplex.exportModel("cplexHull.lp");
-
+//            cplex.exportModel("cplexHull.lp");
             // solve the model and display the solution if one was found
             if (cplex.solve()) {
                 double[] xv = cplex.getValues(s);
@@ -226,23 +227,22 @@ public class GraphHullNumberCplex extends GraphHullNumberAbstract implements IGr
                 for (int j = 0; j < nvars; ++j) {
                     if (xv[j] > 0) {
                         hullset.add(j);
-                        cplex.output().print(j + ", ");
+//                        cplex.output().print(j + ", ");
                     }
                 }
                 cplex.output().println("}");
 
-                for (int i = 0; i < k; i++) {
-                    double[] yv = cplex.getValues(hij[i]);
-
-                    nvars = yv.length;
-                    cplex.output().print("Y" + i + "={");
-                    for (int j = 0; j < nvars; ++j) {
-//                    if (yv[j] >= 0) {
-                        cplex.output().print(j + ": " + yv[j] + ", ");
+//                for (int i = 0; i < k; i++) {
+//                    double[] yv = cplex.getValues(hij[i]);
+//
+//                    nvars = yv.length;
+//                    cplex.output().print("Y" + i + "={");
+//                    for (int j = 0; j < nvars; ++j) {
+////                        cplex.output().print(j + ": " + yv[j] + ", ");
+//                        cplex.output().print(yv[j] + ", ");
 //                    }
-                    }
-                    cplex.output().println("}");
-                }
+//                    cplex.output().println("}");
+//                }
 
             }
             cplex.output().println("Solution status = " + cplex.getStatus());
