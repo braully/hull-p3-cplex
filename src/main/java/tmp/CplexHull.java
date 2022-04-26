@@ -1,4 +1,4 @@
-package io.github.braully.cplex;
+package tmp;
 
 import ilog.concert.IloException;
 import ilog.concert.IloIntVar;
@@ -91,18 +91,6 @@ public class CplexHull {
                 }
             }
 
-//            for (int lin = 0; lin < n; lin++) {
-//                for (int col = lin + 1; col < n; col++) {
-//                    for (int j = 1; j < k; j++) {
-//                        //Se vertice lin é adjacente a vertice col
-//                        if (matrix[lin][col] == 1) {
-//                            //Não podem usar a mesma cor, 
-//                            //cplex.addLe(cplex.sum(xij[lin][j], xij[col][j]), 1);
-//                            cplex.addLe(cplex.sum(hij[lin][j], hij[col][j]), s[j]);
-//                        }
-//                    }
-//                }
-//            }
             cplex.exportModel("cplexHull.lp");
 
             // solve the model and display the solution if one was found

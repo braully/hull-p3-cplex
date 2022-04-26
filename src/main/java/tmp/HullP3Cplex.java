@@ -1,4 +1,4 @@
-package io.github.braully.cplex;
+package tmp;
 
 import ilog.concert.IloException;
 import ilog.concert.IloIntVar;
