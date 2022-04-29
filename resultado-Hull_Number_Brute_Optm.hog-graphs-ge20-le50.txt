@@ -1,0 +1,16 @@
+hog-graphs-ge	hog-graphs-ge20-le50-0	27	Hull Number Brute Optm	2	0.182
+hog-graphs-ge	hog-graphs-ge20-le50-1	21	Hull Number Brute Optm	4	0.055
+hog-graphs-ge	hog-graphs-ge20-le50-2	26	Hull Number Brute Optm	4	0.046
+hog-graphs-ge	hog-graphs-ge20-le50-3	20	Hull Number Brute Optm	6	0.281
+hog-graphs-ge	hog-graphs-ge20-le50-4	26	Hull Number Brute Optm	2	0.04
+hog-graphs-ge	hog-graphs-ge20-le50-5	20	Hull Number Brute Optm	6	0.284
+hog-graphs-ge	hog-graphs-ge20-le50-6	26	Hull Number Brute Optm	7	2.822
+hog-graphs-ge	hog-graphs-ge20-le50-7	30	Hull Number Brute Optm	8	12.353
+hog-graphs-ge	hog-graphs-ge20-le50-8	27	Hull Number Brute Optm	4	0.031
+hog-graphs-ge	hog-graphs-ge20-le50-9	32	Hull Number Brute Optm	9	66.463
+hog-graphs-ge	hog-graphs-ge20-le50-10	26	Hull Number Brute Optm	7	1.012
+hog-graphs-ge	hog-graphs-ge20-le50-11	38	Hull Number Brute Optm	10	1360.478
+hog-graphs-ge	hog-graphs-ge20-le50-12	20	Hull Number Brute Optm	10	0.851
+hog-graphs-ge	hog-graphs-ge20-le50-13	20	Hull Number Brute Optm	6	0.075
+hog-graphs-ge	hog-graphs-ge20-le50-14	28	Hull Number Brute Optm	8	6.051
+hog-graphs-ge	hog-graphs-ge20-le50-15	20	Hull Number Brute Optm	3	0.003

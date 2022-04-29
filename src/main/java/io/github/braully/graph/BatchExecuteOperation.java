@@ -8,6 +8,7 @@ package io.github.braully.graph;
 import io.github.braully.graph.operation.GraphHullNumber;
 import io.github.braully.graph.operation.GraphHullNumberCplex;
 import io.github.braully.graph.operation.GraphHullNumberHeuristicV1;
+import io.github.braully.graph.operation.GraphHullNumberOptm;
 import io.github.braully.graph.operation.IGraphOperation;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -44,6 +45,7 @@ public class BatchExecuteOperation {
     static final IGraphOperation[] operations = new IGraphOperation[]{
         new GraphHullNumber(),
         new GraphHullNumberHeuristicV1(),
+        new GraphHullNumberOptm(),
         new GraphHullNumberCplex()
     };
 

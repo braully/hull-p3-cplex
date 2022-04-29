@@ -1,0 +1,10 @@
+Exemplo de comando para executar
+
+Cplex:
+java -Djava.library.path="/dados/programas/cplex/cplex/bin/x86-64_linux" -jar hull-p3-cplex-1.0.0.jar -3 -i hog-graphs-ge20-le50.g6.gz 
+
+Heuristica:
+java -jar hull-p3-cplex-1.0.0.jar -1 -i hog-graphs-ge20-le50.g6.gz 
+
+Força bruta:
+java -jar hull-p3-cplex-1.0.0.jar -2 -i hog-graphs-ge20-le50.g6.gz

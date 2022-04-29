@@ -21,25 +21,26 @@ public class GraphHullNumberCplex extends GraphHullNumberAbstract implements IGr
 //Help: https://or.stackexchange.com/questions/6316/combinatorial-optimization-problem-using-ibm-ilog-cplex
 
     static final String description = "Hull Number Cplex";
-    
+
     static boolean verbose = false;
-    
+
     public String getName() {
         return description;
     }
-    
+
     public static void main(String[] args) throws IOException {
         System.out.println("Simple test standalone");
+        UndirectedSparseGraphTO<Integer, Integer> graph = UtilGraph.loadGraphAdjMatrix(new FileInputStream("/home/strike/Downloads/graph_41571.mat"));
 //        UndirectedSparseGraphTO<Integer, Integer> graph = UtilGraph.loadGraphG6(new FileInputStream("./graph-petersen.g6"));
-        UndirectedSparseGraphTO<Integer, Integer> graph = UtilGraph.loadGraphES(new FileInputStream("./graph-C5.es"));
-        
+//        UndirectedSparseGraphTO<Integer, Integer> graph = UtilGraph.loadGraphES(new FileInputStream("./graph-C5.es"));
+
         System.out.println("loaded graph: " + graph);
-        
+        verbose = true;
         GraphHullNumberCplex operation = new GraphHullNumberCplex();
         Set<Integer> minHullSetGraph = operation.findMinHullSetGraph(graph);
         System.out.println("Minimum hull set: " + minHullSetGraph);
     }
-    
+
     @Override
     public Set<Integer> findMinHullSetGraph(UndirectedSparseGraphTO<Integer, Integer> graph) {
         Set<Integer> hullset = new HashSet<>();
@@ -47,7 +48,7 @@ public class GraphHullNumberCplex extends GraphHullNumberAbstract implements IGr
             int n = graph.getVertexCount();
             //k é o max iteracoes
             int k = n;
-            
+
             List<String> xnames = new ArrayList();
             for (int i = 0; i < n; i++) {
                 xnames.add("s" + i);
@@ -55,9 +56,17 @@ public class GraphHullNumberCplex extends GraphHullNumberAbstract implements IGr
             //Vetor de cores usadas
             IloIntVar[] s = cplex.boolVarArray(n, xnames.toArray(new String[0]));
 
+//            //Hull set de teste
+//            Set<Integer> hsteste = Set.of(2, 3, 4);
+//            for (int i = 0; i < n; i++) {
+//                if (hsteste.contains(i)) {
+//                    cplex.addEq(s[i], 1, "att");
+//                } else {
+//                    cplex.addEq(s[i], 0, "att");
+//                }
+//            }
             //Objetivo, menor número de vertices
             cplex.addMinimize(cplex.sum(s));
-
             //variables h_ij indicate node i is contamined in k-step;
             IloIntVar[][] hij = new IloIntVar[n][];
             for (int i = 0; i < k; i++) {
@@ -78,16 +87,16 @@ public class GraphHullNumberCplex extends GraphHullNumberAbstract implements IGr
             for (int i = 0; i < n; i++) {
                 cplex.addEq(hij[i][0], s[i], "s");
             }
-            
+
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < k - 1; j++) {
                     cplex.addGe(hij[i][j + 1], hij[i][j], "propag");
                 }
             }
-            
+
             for (int i = 0; i < n; i++) {
-                for (int j = 1; j < k - 1; j++) {
-                    
+                for (int j = 1; j <= k - 1; j++) {
+
                     List<IloIntVar> adjs = new ArrayList<>();
                     //Situação dos vizinhos de i na iteração anterior
                     Collection<Integer> neighbors = graph.getNeighborsUnprotected(i);
@@ -97,29 +106,34 @@ public class GraphHullNumberCplex extends GraphHullNumberAbstract implements IGr
                     //Se i está em S adiciona-lo duas vezes, para simular entrada no HS
                     adjs.add(hij[i][0]);
                     adjs.add(hij[i][0]);
-                    
+
                     IloIntVar[] vizinhosi = adjs.toArray(new IloIntVar[0]);
                     //Se i tem mais de dois vizinhos em h na iteração j-1
-                    cplex.addGe(hij[i][j],
-                            cplex.addGe(cplex.sum(vizinhosi), 2),
+                    //https://www.ibm.com/docs/en/icos/12.8.0.0?topic=constraints-logical-cplex
+
+//                    cplex.addGe(hij[i][j],
+//                            cplex.addGe(cplex.sum(vizinhosi), 2),
+                    cplex.addEq(hij[i][j],
+                            cplex.ge(cplex.sum(vizinhosi), 2),
+                            //                            cplex.max(cplex.sum(vizinhosi), 2),
                             "edge"
                     );
                 }
             }
 
-//            cplex.exportModel("cplexHull.lp");
+//            cplex.exportModel("graphHullNumberCplex.lp");
             // solve the model and display the solution if one was found
             if (!verbose) {
                 cplex.setOut(null);
             }
-            
+
             if (cplex.solve()) {
                 double[] xv = cplex.getValues(s);
 //                double[] slack = cplex.getSlacks(rng[0]);
                 if (verbose) {
                     cplex.output().println("|S|=" + cplex.getObjValue());
                 }
-                
+
                 int nvars = xv.length;
                 if (verbose) {
                     cplex.output().print("S={");
@@ -127,17 +141,19 @@ public class GraphHullNumberCplex extends GraphHullNumberAbstract implements IGr
                 for (int j = 0; j < nvars; ++j) {
                     if (xv[j] > 0) {
                         hullset.add(j);
-//                        cplex.output().print(j + ", ");
+                        if (verbose) {
+                            cplex.output().print(j + ", ");
+                        }
                     }
                 }
                 if (verbose) {
                     cplex.output().println("}");
                 }
-                
+
                 if (verbose) {
                     for (int i = 0; i < k; i++) {
                         double[] yv = cplex.getValues(hij[i]);
-                        
+
                         nvars = yv.length;
                         cplex.output().print("Y" + i + "={");
                         for (int j = 0; j < nvars; ++j) {
@@ -147,11 +163,14 @@ public class GraphHullNumberCplex extends GraphHullNumberAbstract implements IGr
                         cplex.output().println("}");
                     }
                 }
+            } else {
+//                cplex.refi cplex
+//                .getConflict();
             }
             if (verbose) {
                 cplex.output().println("Solution status = " + cplex.getStatus());
             }
-            
+
         } catch (IloException e) {
             System.err.println("Concert exception '" + e + "' caught");
             e.printStackTrace();

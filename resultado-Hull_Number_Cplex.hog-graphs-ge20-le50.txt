@@ -1,0 +1,11 @@
+hog-graphs-ge	hog-graphs-ge20-le50-0	27	Hull Number Cplex	2	6.886
+hog-graphs-ge	hog-graphs-ge20-le50-1	21	Hull Number Cplex	4	6.232
+hog-graphs-ge	hog-graphs-ge20-le50-2	26	Hull Number Cplex	4	159.668
+hog-graphs-ge	hog-graphs-ge20-le50-3	20	Hull Number Cplex	6	15.412
+hog-graphs-ge	hog-graphs-ge20-le50-4	26	Hull Number Cplex	2	3.285
+hog-graphs-ge	hog-graphs-ge20-le50-5	20	Hull Number Cplex	6	12.838
+hog-graphs-ge	hog-graphs-ge20-le50-6	26	Hull Number Cplex	7	471.433
+hog-graphs-ge	hog-graphs-ge20-le50-7	30	Hull Number Cplex	8	18382.809
+hog-graphs-ge	hog-graphs-ge20-le50-8	27	Hull Number Cplex	4	368.47
+hog-graphs-ge	hog-graphs-ge20-le50-9	32	Hull Number Cplex	9	10386.076
+hog-graphs-ge	hog-graphs-ge20-le50-10	26	Hull Number Cplex	7	1080.569

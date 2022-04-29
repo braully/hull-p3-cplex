@@ -3,10 +3,8 @@ package io.github.braully.graph.operation;
 import io.github.braully.graph.UndirectedSparseGraphTO;
 import java.util.ArrayDeque;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import org.apache.commons.math3.util.CombinatoricsUtils;
@@ -23,7 +21,7 @@ public class GraphHullNumber extends GraphHullNumberAbstract implements IGraphOp
             return ceilling;
         }
         int maxSizeSet = ceilling.size();
-        int currentSize = 4;
+        int currentSize = 2;
         int countOneNeigh = 0;
 
         Collection<Integer> vertices = graph.getVertices();
