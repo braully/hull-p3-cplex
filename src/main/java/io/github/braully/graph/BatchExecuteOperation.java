@@ -165,7 +165,7 @@ public class BatchExecuteOperation {
         } else if (inputFilePath.toLowerCase().endsWith(".g6")) {
             try {
                 for (IGraphOperation operation : operationsToExecute) {
-                    processFileG6(operation, dir);
+                    processFileG6(operation, dir, null, contProcess);
                 }
             } catch (Exception ex) {
                 Logger.getLogger(BatchExecuteOperation.class
@@ -174,7 +174,7 @@ public class BatchExecuteOperation {
         } else if (inputFilePath.toLowerCase().endsWith(".g6.gz")) {
             try {
                 for (IGraphOperation operation : operationsToExecute) {
-                    processFileG6GZ(operation, dir);
+                    processFileG6GZ(operation, dir, null, contProcess);
                 }
             } catch (Exception ex) {
                 Logger.getLogger(BatchExecuteOperation.class
