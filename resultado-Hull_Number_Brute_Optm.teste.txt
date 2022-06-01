@@ -1,0 +1,2 @@
+teste.g	teste-0	20	Hull Number Brute Optm	5	0.089
+teste.g	teste-0	20	Hull Number Brute Optm	5	0.06

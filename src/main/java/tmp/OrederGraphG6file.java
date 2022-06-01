@@ -60,7 +60,6 @@ public class OrederGraphG6file {
                 filew.write(s);
                 filew.write("\n");
             }
-
         }
         filew.close();
     }

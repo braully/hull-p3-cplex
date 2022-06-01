@@ -65,7 +65,7 @@ public class GraphHullNumber extends GraphHullNumberAbstract implements IGraphOp
         mustBeIncluded.add(verti);
         while (!mustBeIncluded.isEmpty()) {
             verti = mustBeIncluded.remove();
-            Collection<Integer> neighbors = graph.getNeighbors(verti);
+            Collection<Integer> neighbors = graph.getNeighborsUnprotected(verti);
             for (int vertn : neighbors) {
                 if (vertn == verti) {
                     continue;
