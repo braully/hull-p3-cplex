@@ -5,6 +5,7 @@
  */
 package io.github.braully.graph;
 
+import io.github.braully.graph.operation.GraphDensity;
 import io.github.braully.graph.operation.GraphHullNumber;
 import io.github.braully.graph.operation.GraphHullNumberCplex;
 import io.github.braully.graph.operation.GraphHullNumberHeuristicV1;
@@ -21,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -46,7 +46,8 @@ public class BatchExecuteOperation {
         new GraphHullNumber(),
         new GraphHullNumberHeuristicV1(),
         new GraphHullNumberOptm(),
-        new GraphHullNumberCplex()
+        new GraphHullNumberCplex(),
+        new GraphDensity()
     };
 
     public String getDefaultInput() {
