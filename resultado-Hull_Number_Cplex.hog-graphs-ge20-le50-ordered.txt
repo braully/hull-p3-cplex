@@ -9343,3 +9343,15 @@ hog-graphs-ge	hog-graphs-ge20-le50-ordered-9342	30	Hull Number Cplex	8	6866.358
 hog-graphs-ge	hog-graphs-ge20-le50-ordered-9343	30	Hull Number Cplex	8	4610.342
 hog-graphs-ge	hog-graphs-ge20-le50-ordered-9344	30	Hull Number Cplex	8	10754.802
 hog-graphs-ge	hog-graphs-ge20-le50-ordered-9345	30	Hull Number Cplex	8	16418.586
+hog-graphs-ge	hog-graphs-ge20-le50-ordered-9346	30	Hull Number Cplex	8	7140.275
+hog-graphs-ge	hog-graphs-ge20-le50-ordered-9347	30	Hull Number Cplex	8	7150.783
+hog-graphs-ge	hog-graphs-ge20-le50-ordered-9348	30	Hull Number Cplex	8	10096.656
+hog-graphs-ge	hog-graphs-ge20-le50-ordered-9349	30	Hull Number Cplex	8	6506.765
+hog-graphs-ge	hog-graphs-ge20-le50-ordered-9350	30	Hull Number Cplex	8	6083.818
+hog-graphs-ge	hog-graphs-ge20-le50-ordered-9351	30	Hull Number Cplex	8	13482.61
+hog-graphs-ge	hog-graphs-ge20-le50-ordered-9352	30	Hull Number Cplex	8	17183.167
+hog-graphs-ge	hog-graphs-ge20-le50-ordered-9353	30	Hull Number Cplex	8	6495.148
+hog-graphs-ge	hog-graphs-ge20-le50-ordered-9354	30	Hull Number Cplex	8	7663.137
+hog-graphs-ge	hog-graphs-ge20-le50-ordered-9355	30	Hull Number Cplex	8	8161.729
+hog-graphs-ge	hog-graphs-ge20-le50-ordered-9356	30	Hull Number Cplex	8	4597.743
+hog-graphs-ge	hog-graphs-ge20-le50-ordered-9357	30	Hull Number Cplex	8	9274.535
